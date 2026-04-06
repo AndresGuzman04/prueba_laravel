@@ -18,7 +18,8 @@ Route::get('/', function () {
 });
 
 
-Route::resource('clientes', App\Http\Controllers\ClienteController::class);
+Route::resource('clientes-data', App\Http\Controllers\ClienteController::class);
+Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'view']);
 
 Route::get('/tipos-documento', [App\Http\Controllers\DocumentoController::class, 'index']);
 
