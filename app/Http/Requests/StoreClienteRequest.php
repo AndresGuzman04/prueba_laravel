@@ -23,16 +23,15 @@ class StoreClienteRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            // OBLIGATORIOS
-            'tipo_cliente' => 'required',
+        $rules = [
+            'tipo_cliente' => 'required|in:2,3,4', // Restringe valores posibles
             'cod_tipo_documento' => 'required',
             'dui_nit' => 'required|string|max:20|min:9',
             'nombre' => 'required|string|max:255',
-            'nombre_comercial' => 'required|string|max:255',
             'correo' => 'required|email|max:255',
 
-            // OPCIONALES
+            // Opcionales por defecto
+            'nombre_comercial' => 'nullable|string|max:255',
             'nrc' => 'nullable|string|max:20',
             'telefono' => 'nullable|string|max:20',
             'cod_actividad_economica' => 'nullable|integer',
@@ -42,9 +41,33 @@ class StoreClienteRequest extends FormRequest
             'municipio' => 'nullable',
             'descripcion_adicional' => 'nullable|string|max:500',
             'ciudad' => 'nullable|string|max:100',
-            'pais' => 'nullable|string|max:5',
+            'fk_id_pais' => 'nullable|string|max:5',
             'direccion' => 'nullable|string|max:500',
         ];
+
+        // if ($this->input('tipo_cliente') == 2) {
+        //     $rules['nombre_comercial'] = 'required|string|max:255';
+        //     $rules['nrc'] = 'required|string|max:50';
+        //     $rules['telefono'] = 'required|string|max:20';
+        //     $rules['cod_actividad_economica'] = 'required';
+        //     $rules['fk_id_tipo_contribuyente'] = 'required';
+        //     $rules['tipo_persona'] = 'required';
+        //     $rules['departamento'] = 'required';    // ¿Seguro que no lo necesitas?
+        //     $rules['municipio'] = 'required';       // ¿Seguro que no lo necesitas?
+        //     $rules['ciudad'] = 'required|string|max:100';
+        // }
+        // if ($this->input('tipo_cliente') == 3) {
+        //     $rules['telefono'] = 'required|string|max:20';
+        //     $rules['fk_id_pais'] = 'required';
+        //     $rules['ciudad'] = 'required|string|max:100';
+        // }
+        // if ($this->input('tipo_cliente') == 4) {
+        //     $rules['departamento'] = 'required';
+        //     $rules['municipio'] = 'required';
+        //     $rules['ciudad'] = 'required|string|max:100';
+        // }
+
+        return $rules;
     }
 
     public function messages()
@@ -55,8 +78,17 @@ class StoreClienteRequest extends FormRequest
             'cod_tipo_documento.required' => 'El tipo de documento es obligatorio.',
             'dui_nit.required' => 'El número de documento es obligatorio.',
             'nombre.required' => 'El nombre es obligatorio.',
-            'nombre_comercial.required' => 'El nombre comercial es obligatorio.',
             'correo.required' => 'El correo electrónico es obligatorio.',
+            'fk_id_tipo_contribuyente.required' => 'El tipo de contribuyente es obligatorio.',
+            'nombre_comercial.required' => 'El nombre comercial es obligatorio .',
+            'nrc.required' => 'El NRC es obligatorio.',
+            'telefono.required' => 'El teléfono es obligatorio.',
+            'cod_actividad_economica.required' => 'El giro es obligatorio.',
+            'tipo_persona.required' => 'El tipo de persona es obligatorio.',
+            'departamento.required' => 'El departamento es obligatorio.',
+            'municipio.required' => 'El municipio es obligatorio.',
+            'ciudad.required' => 'La ciudad es obligatoria.',
+
 
             // fk_id_tipo_contribuyente
             'fk_id_tipo_contribuyente.integer' => 'El tipo de contribuyente debe ser un valor válido.',
@@ -115,6 +147,8 @@ class StoreClienteRequest extends FormRequest
             'direccion.string' => 'La dirección debe ser texto.',
             'direccion.max' => 'La dirección no debe exceder los :max caracteres.',
         ];
+
+        
     }
 
     protected function failedValidation(Validator $validator)

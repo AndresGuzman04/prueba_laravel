@@ -23,7 +23,7 @@ class ClienteController extends Controller
     {
         //$clientes = Cliente::latest()->get();
         //dd($clientes);
-        $clientes = Cliente::latest()->get();
+        $clientes = Cliente::orderBy('id_catalogo_cliente', 'desc')->get();
         return response()->json(['clientes' => $clientes]);
       
     }

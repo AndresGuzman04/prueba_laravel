@@ -4,20 +4,20 @@
     <!---NRC / IVA---->
     <div class="col-md-4">
         <label for="nrc" class="form-label">NRC / IVA:</label>
-        <input type="text" name="nrc" id="nrc" class="form-control" value="{{old('nrc' ?? '')}}">
+        <input type="text" name="nrc" id="nrc" class="form-control" value="">
     </div>
 
     <!---Telefono ---->
     <div class="col-md-4">
         <label for="telefono" class="form-label">Teléfono:</label>
-        <input type="text" name="telefono" id="telefono" class="form-control" value="{{old('telefono' ?? '')}}">
+        <input type="text" name="telefono" id="telefono" class="form-control" value="">
     </div>
 
 
     <!---Giro ---->
     <div class="col-md-4">
         <label class="form-label">Giro:</label>
-        <select class="form-select" id="giro" name="giro">
+        <select class="form-select" id="cod_actividad_economica" name="cod_actividad_economica">
                 <option value="">Seleccione</option>
         </select>
     </div>
@@ -25,7 +25,7 @@
     <!---Tipo Contribuyente ---->
     <div class="col-md-4">
         <label class="form-label">Tipo de Contribuyente:</label>
-        <select class="form-select" id="tipo_contribuyente" name="tipo_contribuyente">
+        <select class="form-select" id="fk_id_tipo_contribuyente" name="fk_id_tipo_contribuyente">
                 <option value="">Seleccione</option>
         </select>
     </div>
@@ -43,7 +43,7 @@
     <!---Departamentos ---->
     <div class="col-md-4">
         <label class="form-label">Departamento:</label>
-        <select class="form-select" id="departamento" name="departamento">
+        <select class="form-select departamento" id="departamento" name="departamento">
                 <option value="">Seleccione</option>
         </select>
     </div>
@@ -51,7 +51,7 @@
     <!---Municipios ---->
     <div class="col-md-4">
         <label class="form-label">Municipio:</label>
-        <select class="form-select" id="municipio" name="municipio">
+        <select class="form-select municipio" id="municipio" name="municipio">
                 <option value="">Seleccione</option>
         </select>
     </div>

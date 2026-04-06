@@ -3,6 +3,6 @@
     <!---Direccion ---->
     <div class="col-md-4">
         <label for="direccion" class="form-label">Dirección:</label>
-        <input type="text" name="direccion" id="direccion" class="form-control" value="{{old('direccion' ?? '')}}">
+        <input type="text" name="direccion" id="direccion" class="form-control" value="">
     </div>
 </div>
