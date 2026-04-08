@@ -35,8 +35,8 @@
         <label for="tipo_persona" class="form-label">Tipo de persona:</label>
         <select class="form-select" name="tipo_persona" id="tipo_persona">
             <option value="" selected disabled>Seleccione una opción</option>
-            <option value="1" {{ old('tipo_persona') == '1' ? 'selected' : '' }}>Natural</option>
-            <option value="2" {{ old('tipo_persona') == '2' ? 'selected' : '' }}>Juridica</option>
+            <option value="1" >Natural</option>
+            <option value="2" >Juridica</option>
         </select>
     </div>
 
@@ -59,19 +59,19 @@
     <!---Descripcion general---->
     <div class="col-md-4">
         <label for="descripcion_adicional" class="form-label">Descripción General:</label>
-        <input type="text" name="descripcion_adicional" id="descripcion_adicional" class="form-control" value="{{old('descripcion_adicional' ?? '')}}">
+        <input type="text" name="descripcion_adicional" id="descripcion_adicional" class="form-control" value="">
     </div>
 
     <!---Direccion ---->
     <div class="col-md-4">
         <label for="direccion" class="form-label">Dirección:</label>
-        <input type="text" name="direccion" id="direccion" class="form-control" value="{{old('direccion' ?? '')}}">
+        <input type="text" name="direccion" id="direccion" class="form-control" value="">
     </div>
 
     <!---Ciudad---->
     <div class="col-md-4">
         <label for="ciudad" class="form-label">Ciudad:</label>
-        <input type="text" name="ciudad" id="ciudad" class="form-control" value="{{old('ciudad' ?? '')}}">
+        <input type="text" name="ciudad" id="ciudad" class="form-control" value="">
     </div>
     
 </div>
