@@ -2,7 +2,7 @@
     let tablaClientes;
     //  recargar la tabla
 $(document).ready(function(){
-
+        deshabilitarCamposOcultos();
         tablaClientes = $('#tablaClientes').DataTable({
             ajax: {
                 url: '/clientes-data',
@@ -80,7 +80,7 @@ $(document).ready(function(){
                 let options = '<option value="">Seleccione</option>';
 
                 $.each(response, function(index, item){
-                    options += `<option value="${item.alpha2Code}">
+                    options += `<option value="${item.callingCodes[0]}">
                                     ${item.name} (+${item.callingCodes[0] ?? ''})
                                 </option>`;
                 });
@@ -125,7 +125,7 @@ $(document).ready(function(){
                     options += `<option value="${item.id_departamento}">${item.departamento}</option>`;
                 });
 
-                $('.departamento').html(options);
+                $('.cod_departamento').html(options);
             },
             error: function(error){
                 console.log(error);
@@ -133,11 +133,11 @@ $(document).ready(function(){
         });
 
         //Datos para el select municipios
-        $('.departamento').on('change', function() {
+        $('.cod_departamento').on('change', function() {
 
             let departamentoId = $(this).val();
 
-            $('.municipio').html('<option>Cargando...</option>');
+            $('.cod_municipio').html('<option>Cargando...</option>');
 
             $.ajax({
                 url: '/municipios',
@@ -151,11 +151,31 @@ $(document).ready(function(){
                         options += `<option value="${item.id_municipio}">${item.municipio}</option>`;
                     });
 
-                    $('.municipio').html(options);
+                    $('.cod_municipio').html(options);
                 }
             });
 
         });
+
+        function cargarMunicipiosEdit(departamentoId, callback) {
+            $.ajax({
+                url: '/municipios',
+                type: 'GET',
+                data: { departamento_id: departamentoId },
+                success: function(response) {
+                    let options = '<option value="">Seleccione</option>';
+                    $.each(response, function(index, item) {
+                        options += `<option value="${item.id_municipio}">${item.municipio}</option>`;
+                    });
+                    // Afecta solo al select visible (o al que tenga clase .cod_municipio dentro del formulario visible)
+                    $('.tipo-form:not(.d-none) .cod_municipio').html(options);
+                    if (callback) callback();
+                },
+                error: function() {
+                    if (callback) callback();
+                }
+            });
+        }
 
         // Editar cliente
         $("body").on("click", ".edit-cliente", function(){
@@ -165,7 +185,6 @@ $(document).ready(function(){
                 url: '/clientes-data/' + clienteId,
                 dataType: 'json',
                 success: function(response){
-                    console.log(response);
 
                     // Asignar valores del cliente al formulario
                     $('#tipo_cliente').val(response.cliente.tipo_cliente).trigger('change');
@@ -175,16 +194,25 @@ $(document).ready(function(){
                     $('#nombre_comercial').val(response.cliente.nombre_comercial);
                     $('#correo').val(response.cliente.correo);
                     $('#nrc').val(response.cliente.nrc);
-                    $('#telefono').val(response.cliente.telefono);
-                    $('#giro').val(response.cliente.cod_actividad_economica);
-                    $('#tipo_contribuyente').val(response.cliente.fk_id_tipo_contribuyente);
+                    $('.telefono').val(response.cliente.telefono);
+                    $('#cod_actividad_economica').val(response.cliente.cod_actividad_economica);
+                    $('#fk_id_tipo_contribuyente').val(response.cliente.fk_id_tipo_contribuyente);
                     $('#tipo_persona').val(response.cliente.tipo_persona);
-                    $('#departamento').val(response.cliente.cod_departamento);
-                    $('#municipio').val(response.cliente.cod_municipio);
-                    $('#descripcion_adicional').val(response.cliente.descripcion_adicional);
-                    $('#ciudad').val(response.cliente.ciudad);
-                    $('#pais').val(response.cliente.fk_id_pais);
-                    $('#direccion').val(response.cliente.direccion);
+                    $('.descripcion_adicional').val(response.cliente.descripcion_adicional);
+                    $('.ciudad').val(response.cliente.ciudad);
+                    $('#fk_id_pais').val(response.cliente.fk_id_pais);
+                    $('.direccion').val(response.cliente.direccion);
+
+                    // --- Manejo de departamento y municipio ---
+                    let $depto = $('.tipo-form:not(.d-none) .cod_departamento');
+                    let $municipio = $('.tipo-form:not(.d-none) .cod_municipio');
+
+                    $depto.val(response.cliente.cod_departamento);
+
+                    // Cargar municipios y luego asignar el valor
+                    cargarMunicipiosEdit(response.cliente.cod_departamento, function() {
+                        $municipio.val(response.cliente.cod_municipio);
+                    });
 
                     let collapseElement = document.getElementById('formCliente');
 
@@ -194,8 +222,9 @@ $(document).ready(function(){
                     });
 
                     bsCollapse.show();
-
+                    
                     mostrarModoEdicion(clienteId);
+                    
 
                 },
                 error: function(xhr){
@@ -207,8 +236,6 @@ $(document).ready(function(){
         // Actualizar cliente
         $('#updateCliente').click(function(){
 
-            console.log('Actualizando cliente con ID:', clienteId);
-
             let formData = {
                 tipo_cliente: $('#tipo_cliente').val(),
                 cod_tipo_documento: $('#cod_tipo_documento').val(),
@@ -218,18 +245,19 @@ $(document).ready(function(){
                 correo: $('#correo').val(),
 
                 nrc: $('#nrc').val(),
-                telefono: $('#telefono').val(),
-                cod_actividad_economica: $('#giro').val(),
-                fk_id_tipo_contribuyente: $('#tipo_contribuyente').val(),
+                telefono: $('.tipo-form:not(.d-none) input[name="telefono"]').val(),
+                cod_actividad_economica: $('#cod_actividad_economica').val(),
+                fk_id_tipo_contribuyente: $('#fk_id_tipo_contribuyente').val(),
                 tipo_persona: $('#tipo_persona').val(),
-                cod_departamento: $('#departamento').val(),
-                cod_municipio: $('#municipio').val(),
-                descripcion_adicional: $('#descripcion_adicional').val(),
-                ciudad: $('#ciudad').val(),
-                fk_id_pais: $('#pais').val(),
-                direccion: $('#direccion').val(),
+                cod_departamento: $('.tipo-form:not(.d-none) select[name="cod_departamento"]').val(),
+                cod_municipio: $('.tipo-form:not(.d-none) select[name="cod_municipio"]').val(),
+                descripcion_adicional: $('.tipo-form:not(.d-none) input[name="descripcion_adicional"]').val(),
+                ciudad: $('.tipo-form:not(.d-none) input[name="ciudad"]').val(),
+                fk_id_pais: $('#fk_id_pais').val(),
+                direccion: $('.tipo-form:not(.d-none) input[name="direccion"]').val(),
                 _token: $('meta[name="csrf-token"]').attr('content')
             };
+
 
             $(".error-message").remove();
 
@@ -284,16 +312,16 @@ $(document).ready(function(){
                 correo: $('#correo').val(),
 
                 nrc: $('#nrc').val(),
-                telefono: $('#telefono').val(),
-                cod_actividad_economica: $('#giro').val(),
+                telefono: $('.tipo-form:not(.d-none) input[name="telefono"]').val(),
+                cod_actividad_economica: $('#cod_actividad_economica').val(),
                 fk_id_tipo_contribuyente: $('#fk_id_tipo_contribuyente').val(),
                 tipo_persona: $('#tipo_persona').val(),
-                cod_departamento: $('#departamento').val(),
-                cod_municipio: $('#municipio').val(),
-                descripcion_adicional: $('#descripcion_adicional').val(),
-                ciudad: $('#ciudad').val(),
+                cod_departamento: $('.tipo-form:not(.d-none) select[name="cod_departamento"]').val(),
+                cod_municipio: $('.tipo-form:not(.d-none) select[name="cod_municipio"]').val(),
+                descripcion_adicional: $('.tipo-form:not(.d-none) input[name="descripcion_adicional"]').val(),
+                ciudad: $('.tipo-form:not(.d-none) input[name="ciudad"]').val(),
                 fk_id_pais: $('#fk_id_pais').val(),
-                direccion: $('#direccion').val(),
+                direccion: $('.tipo-form:not(.d-none) input[name="direccion"]').val(),
                 _token: $('meta[name="csrf-token"]').attr('content')
             };
 
@@ -324,6 +352,7 @@ $(document).ready(function(){
                     tablaClientes.ajax.reload();
 
                     Toast.fire('¡Creado!', 'El cliente se ha guardado correctamente.', 'success');
+                    console.log(data);
 
                 },
 

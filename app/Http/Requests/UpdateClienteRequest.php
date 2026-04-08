@@ -38,11 +38,11 @@ class UpdateClienteRequest extends FormRequest
             'cod_actividad_economica' => 'nullable|integer',
             'fk_id_tipo_contribuyente' => 'nullable',
             'tipo_persona' => 'nullable',
-            'departamento' => 'nullable',
-            'municipio' => 'nullable',
+            'cod_departamento' => 'nullable',
+            'cod_municipio' => 'nullable',
             'descripcion_adicional' => 'nullable|string|max:500',
             'ciudad' => 'nullable|string|max:100',
-            'pais' => 'nullable|string|max:5',
+            'fk_id_pais' => 'nullable|string|max:5',
             'direccion' => 'nullable|string|max:500',
         ];
     }

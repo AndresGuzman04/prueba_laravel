@@ -24,7 +24,7 @@ class StoreClienteRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'tipo_cliente' => 'required|in:2,3,4', // Restringe valores posibles
+            'tipo_cliente' => 'required',
             'cod_tipo_documento' => 'required',
             'dui_nit' => 'required|string|max:20|min:9',
             'nombre' => 'required|string|max:255',
@@ -37,8 +37,8 @@ class StoreClienteRequest extends FormRequest
             'cod_actividad_economica' => 'nullable|integer',
             'fk_id_tipo_contribuyente' => 'nullable',
             'tipo_persona' => 'nullable',
-            'departamento' => 'nullable',
-            'municipio' => 'nullable',
+            'cod_departamento' => 'nullable',
+            'cod_municipio' => 'nullable',
             'descripcion_adicional' => 'nullable|string|max:500',
             'ciudad' => 'nullable|string|max:100',
             'fk_id_pais' => 'nullable|string|max:5',

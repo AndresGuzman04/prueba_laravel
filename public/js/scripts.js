@@ -22,12 +22,14 @@
         $btnSave.show();
         $btnUpdate.hide();
         clienteId = null;
+        deshabilitarCamposOcultos(); 
     }
 
     function mostrarModoEdicion(id) {
         clienteId = id;
         $btnSave.hide();
         $btnUpdate.show();
+        deshabilitarCamposOcultos();
     }
 
     // Efectos de colapsar formulario
@@ -53,30 +55,41 @@
         $('#clienteForm span').remove();
 
         $('.tipo-form').addClass('d-none');
+         // Vuelve a dejar todo deshabilitado correctamente
     });
 
+    function habilitarTodosLosCampos() {
+        document.querySelectorAll('.tipo-form input, .tipo-form select, .tipo-form textarea').forEach(campo => {
+            campo.disabled = false;
+        });
+    }
+
+    function deshabilitarCamposOcultos() {
+        document.querySelectorAll('.tipo-form.d-none').forEach(divOculto => {
+            divOculto.querySelectorAll('input, select, textarea').forEach(campo => {
+                campo.disabled = true;
+            });
+        });
+    }
  
     // Mostrar/ocultar campos según tipo de cliente
     $('#tipo_cliente').on('change', function () {
-
         let tipo = $(this).val();
 
-        // ocultar todos
+        // Primero habilitamos todos (para que los que se muestren funcionen)
+        habilitarTodosLosCampos();
+
+        // Ocultar todos los formularios específicos
         $('.tipo-form').addClass('d-none');
 
-        // mostrar según selección
-        if (tipo == '1') {
-            $('#formConsumidor').removeClass('d-none');
-        } 
-        else if (tipo == '2') {
-            $('#formEmpresa').removeClass('d-none');
-        } 
-        else if (tipo == '3') {
-            $('#formExtranjero').removeClass('d-none');
-        } 
-        else if (tipo == '4') {
-            $('#formProveedor').removeClass('d-none');
-        }
+        // Mostrar según selección
+        if (tipo == '1') $('#formConsumidor').removeClass('d-none');
+        else if (tipo == '2') $('#formEmpresa').removeClass('d-none');
+        else if (tipo == '3') $('#formExtranjero').removeClass('d-none');
+        else if (tipo == '4') $('#formProveedor').removeClass('d-none');
+
+        // Deshabilitar los campos que quedaron dentro de los divs ocultos
+        deshabilitarCamposOcultos();
     });
 
 

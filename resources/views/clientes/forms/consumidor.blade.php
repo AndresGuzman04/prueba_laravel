@@ -3,6 +3,6 @@
     <!---Direccion ---->
     <div class="col-md-4">
         <label for="direccion" class="form-label">Dirección:</label>
-        <input type="text" name="direccion" id="direccion" class="form-control" value="">
+        <input type="text" name="direccion" class="form-control direccion" value="">
     </div>
 </div>
