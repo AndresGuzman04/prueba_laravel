@@ -139,21 +139,7 @@ $(document).ready(function(){
 
             $('.cod_municipio').html('<option>Cargando...</option>');
 
-            $.ajax({
-                url: '/municipios',
-                type: 'GET',
-                data: { departamento_id: departamentoId },
-                success: function(response){
-
-                    let options = '<option value="">Seleccione</option>';
-
-                    $.each(response, function(index, item){
-                        options += `<option value="${item.id_municipio}">${item.municipio}</option>`;
-                    });
-
-                    $('.cod_municipio').html(options);
-                }
-            });
+           cargarMunicipiosEdit(departamentoId);
 
         });
 
@@ -216,7 +202,7 @@ $(document).ready(function(){
 
                     let collapseElement = document.getElementById('formCliente');
 
-                    // 🔥 FORZAR cierre
+                    //  FORZAR cierre
                     let bsCollapse = new bootstrap.Collapse(collapseElement, {
                         toggle: false
                     });
