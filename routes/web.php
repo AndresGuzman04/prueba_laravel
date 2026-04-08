@@ -13,13 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 Route::resource('clientes-data', App\Http\Controllers\ClienteController::class);
-Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'view']);
+
+Route::get('/', [App\Http\Controllers\ClienteController::class, 'view']);
 
 Route::get('/tipos-documento', [App\Http\Controllers\DocumentoController::class, 'index']);
 
