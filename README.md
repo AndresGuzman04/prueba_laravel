@@ -1,4 +1,4 @@
-# Punto de Venta 
+# Prueba Laravel
 
 ## Dependencias
 
